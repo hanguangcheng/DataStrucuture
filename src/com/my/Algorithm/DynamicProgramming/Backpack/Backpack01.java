@@ -18,6 +18,9 @@ public class Backpack01 {
   }
 
   public static int Backpack(ArrayList<commodity> arr, int maxWeight) {
+    // 记录商品存放是的顺序
+    int[][] Strategy = new int[arr.size() + 1][maxWeight + 1];
+    //动态规划图表
     int[][] ints = new int[arr.size() + 1][maxWeight + 1];
     for (int i = 1; i < arr.size() + 1; i++) {
       for (int j = 1; j < maxWeight + 1; j++) {
@@ -32,13 +35,32 @@ public class Backpack01 {
           // 判断当选择此无 既 当前背包价值+（总重量-当前物体重量）的方案价值  和
           // 此重量上一个物体的价值既（横轴相同纵轴-1的价值）
           // 的大小  取大值
-          ints[i][j] =
-              Math.max(
-                  ints[i - 1][j],
-                  ints[i - 1][j - arr.get(i - 1).getWeight()] + arr.get(i - 1).getValue());
+          //          ints[i][j] =
+          //              Math.max(
+          //                  ints[i - 1][j],
+          //                  ints[i - 1][j - arr.get(i - 1).getWeight()] + arr.get(i -
+          // 1).getValue());
+          int a = ints[i - 1][j];
+          int b = ints[i - 1][j - arr.get(i - 1).getWeight()] + arr.get(i - 1).getValue();
+          if (a < b) {
+            ints[i][j] = b;
+            Strategy[i][j] = 1;
+          } else {
+            ints[i][j] = a;
+          }
         }
       }
     }
+    int i = arr.size();
+    int j = maxWeight;
+    while (i > 0 && j > 0) {
+      if (Strategy[i][j] == 1) {
+        System.out.println("将第" + i + "个物体放入背包");
+        j -= arr.get(i - 1).getWeight();
+      }
+      i--;
+    }
+    int a =0;
     return ints[arr.size()][maxWeight];
   }
 }

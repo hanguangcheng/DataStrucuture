@@ -29,7 +29,7 @@ public class EngineeringProblems {
       jb[i].start = ints.get(i)[1];
       jb[i].end = ints.get(i)[2];
     }
-    int[][] arr = new int[ints.size()][4];
+    int[][] arr = new int[ints.size()][3];
     System.out.println(prev(arr, jb));
     for (int[] ints1 : arr) {
       System.out.println(Arrays.toString(ints1));
@@ -40,10 +40,6 @@ public class EngineeringProblems {
     // 初始化第一个方案的数据
     arr[0][1] = 0;
     arr[0][2] = job[0].payment;
-    // 存放方案的最大价值
-    int max = job[0].payment;
-    // 存放方案
-    String fangan = "1";
     for (int i = 0; i < arr.length; ++i) {
       // 将第一个job填入表中 为第二列调用
       arr[i][0] = i + 1;
@@ -58,17 +54,19 @@ public class EngineeringProblems {
         // 寻找最大价值
         if (arr[i][1] == 0) {
           // 比较当前价值和上一个方案的价值大小
-          max = arr[i][2] = Math.max(job[i].payment, arr[i - 1][2]);
+          arr[i][2] = Math.max(job[i].payment, arr[i - 1][2]);
 
         } else {
           // 比较当前方案和上一个方案的价值
           // arr[arr[i][1]-1][2]
           // arr[i][1]选择当前能和哪一个进行组合，因为数组是从0开始方案是从1开始所以需要减去1
-          max = arr[i][2] = Math.max(job[i].payment + arr[arr[i][1] - 1][2], arr[i - 1][2]);
+          int a = job[i].payment + arr[arr[i][1] - 1][2];
+          int b = arr[i - 1][2];
+          arr[i][2] = Math.max(a, b);
         }
       }
     }
-    return max;
+    return arr[arr.length - 1][arr[0].length - 1];
   }
 
   static class Job {
